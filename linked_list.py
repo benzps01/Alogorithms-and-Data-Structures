@@ -1,4 +1,23 @@
+'''
+This is an example of a Data Structure --> Linked List
+The methods implemented are :
+1. Insert Beginning
+2. Insert End
+3. Insert After a value
+4. Insert Before a value
+5. Insert Multiple Values
+6. Insert at a particular point
+7. Remove a value at an index
+8. remove by the value
+9. searching through the linked list and returning the location
+10. getting the length of the linked list
+11. getting the value at the position
+'''
+
 ##Creating class Element
+from turtle import position
+
+
 class Element:
 
     ##Initializing the Element object
@@ -41,6 +60,27 @@ class LinkedList:
             new_node = Element(data)
             new_node.next = n.next
             n.next = new_node
+        
+    def InsertBefore(self,new_data,before_value):
+        if self.head is None:
+            raise Exception ("Linked List is empty")
+        if self.head.data == before_value:
+            new_node = Element(new_data)
+            new_node.next = self.head
+            self.head = new_node
+            return
+        itr = self.head
+        while itr.next is not None:
+            if itr.next.data == before_value:
+                break
+            itr = itr.next
+        if itr.next is None:
+            print('Node is not found')
+        else:
+            new_node = Element(new_data)
+            new_node.next = itr.next
+            itr.next = new_node
+            
 
     def insert_values(self, data_list):
         #self.head = None
@@ -107,6 +147,17 @@ class LinkedList:
             itr = itr.next
             count += 1
 
+    def search(self,data):
+        itr = self.head
+        count = 0
+        while itr:
+            if itr.data == data:
+                break
+            else:
+                itr = itr.next
+                count += 1
+        print(f"Data exists at {count}")
+
     ##printing the ll
     def printList(self):
         lstr = ''
@@ -169,3 +220,9 @@ llist.get_position(6)
 llist.remove_by_value(88)
 print('Length: ',llist.get_length())
 llist.printList()
+
+llist.search(33)
+
+llist.InsertBefore(10,33)
+llist.printList()
+print('Length: ',llist.get_length())
