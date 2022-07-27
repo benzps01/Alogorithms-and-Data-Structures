@@ -1,3 +1,21 @@
+'''
+This is an example of a Data Structure --> Doubly Linked List
+The methods implemented are :
+1. Insert Beginning
+2. Insert End
+3. Insert After a value
+4. Insert Before a value
+5. Insert Multiple Values
+6. Insert at a particular point
+7. Remove a value at an index
+8. remove by the value
+9. searching through the linked list and returning the location
+10. getting the length of the linked list
+11. getting the value at the position
+12. print forward
+13. print backward
+'''
+
 class Element:
 
     def __init__(self, data=None, next=None, prev=None):
@@ -43,6 +61,27 @@ class DLL:
                 itr.next.prev = new_node
             itr.next = new_node
 
+    def InsertBefore(self,data,before_data):
+        itr = self.head
+        if itr == None:
+            return 'There is no such node'
+        else:
+            while itr:
+                if itr.data == before_data:
+                    break
+                itr = itr.next
+            new_node = Element(data)
+            new_node.prev = itr.prev
+            new_node.next = itr
+            if itr.prev is not None:
+                itr.prev.next = new_node
+            itr.prev = new_node
+
+    def insert_values(self, data_list):
+        #self.head = None
+        for data in data_list:
+            self.InsertEnd(data)
+
     def insert_at(self,index,data):
         if index < 0 or index > self.get_length():
             raise Exception('Invalid Index')
@@ -64,6 +103,44 @@ class DLL:
         if itr.next is not None:
             itr.next.prev = new_node
         itr.next = new_node
+
+    def remove_at(self,index):
+        if index < 0 or index >= self.get_length():
+            raise Exception('Invalid Index')
+        
+        if index == 0:
+            self.head = self.head.next
+            self.head.prev = None
+            return
+
+        count = 0
+        itr = self.head
+        while itr:
+            if count == index - 1:
+                itr.next.next.prev = itr
+                itr.next = itr.next.next
+                break
+            itr = itr.next
+            count += 1 
+
+    def remove_by_value(self,data):
+        itr = self.head
+        count = 0
+        while itr:
+            if itr.data == data:
+                self.remove_at(count)
+            itr = itr.next
+            count += 1
+
+    def search(self,data):
+        itr = self.head
+        count = 0
+        while itr:
+            if itr.data == data:
+                break
+            itr = itr.next
+            count += 1
+        print(f'Data at {count} is: ',itr.data)
 
 
     def printforward(self):
@@ -141,3 +218,25 @@ print('Insert At')
 doublyll.insert_at(2,10)
 doublyll.printforward()
 doublyll.printbackward()
+
+print('Insert Before')
+doublyll.InsertBefore(6,10)
+doublyll.printforward()
+doublyll.printbackward()
+
+print('Insert Muliple values')
+doublyll.insert_values([9,11,20,30])
+doublyll.printforward()
+doublyll.printbackward()
+
+print('Remove At')
+doublyll.remove_at(4)
+doublyll.printforward()
+doublyll.printbackward()
+
+print('Remove By Value')
+doublyll.remove_by_value(11)
+doublyll.printforward()
+doublyll.printbackward()
+
+doublyll.search(9)
