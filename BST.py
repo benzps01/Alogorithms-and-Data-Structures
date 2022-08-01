@@ -13,24 +13,31 @@ class BSTreeNode:
         self.left = None
         self.right = None
 
-    def add_child(self, data):
-        if data == self.data:
+    def add_child(self, root):
+        if root is None:
+            self.data == root
+            return 
+
+        if root == self.data:
             return
         
-        if data < self.data:
+        if root < self.data:
             # add data to left subtree
             if self.left:
-                self.left.add_child(data)
+                self.left.add_child(root)
             else:
-                self.left = BSTreeNode(data)
+                self.left = BSTreeNode(root)
         else:
             # add data to right subtree
             if self.right:
-                self.right.add_child(data)
+                self.right.add_child(root)
             else:
-                self.right = BSTreeNode(data)
+                self.right = BSTreeNode(root)
 
-    def in_order_traversal(self):
+# This is based on Recursive Method
+    def in_order_traversal(self,root):
+        '''
+        Method 1
         elements = []
 
         #visit left tree
@@ -44,28 +51,33 @@ class BSTreeNode:
         if self.right:
             elements += self.right.in_order_traversal()
 
-        return elements
+        return elements'''
 
-    '''def InOrder(root):
-        current = root
+        '''
+        Method 2
+        '''
+        if root is None:
+            return []
+        return self.in_order_traversal(root.left) + [root.data] + self.in_order_traversal(root.right)
+
+
+#This is based on Iterative Method
+    def InOrder(self,root):
+
         stack = []
-
-        while True:
-
-            if current is not None:
+        current = root
+        
+        while current or stack:
+            if current:
                 stack.append(current)
-
                 current = current.left
-            
-            elif(stack):
-                current = stack.pop()
-                print(current.data, end=" ")
-
-                current = current.right
-            
             else:
-                break
-'''
+                current = stack.pop()
+                print(current.data, end  = " ")
+                current = current.right
+
+        print()
+
 
     def pre_order_traversal(self):
         elements = []
@@ -83,6 +95,23 @@ class BSTreeNode:
 
         return elements
 
+    def PreOrder(self,root):
+        stack = []
+        current = root
+        while stack or current:
+            while current:
+                print(current.data,end = " ")
+            
+                if current.right:
+                    stack.append(current.right)
+
+                current = current.left
+
+            if stack:
+                current = stack.pop()
+
+        print()
+
     def post_order_traversal(self):
         elements = []
 
@@ -99,7 +128,21 @@ class BSTreeNode:
     
         return elements
 
+    def PostOrder(self,root):
+        stack = []
+        current = root
 
+        while stack or current:
+            while current:
+                if current.right:
+                    stack.append(current.right)
+
+                current = current.left
+
+            print(current.data,end= " ")
+
+        if stack:
+            current = stack.pop()
     
 
     def search(self,val):
@@ -147,27 +190,22 @@ class BSTreeNode:
 
         return self.data + left + right
 
-
-def build_tree(elements):
-    root = BSTreeNode(elements[0])
-
-    for i in range (1,len(elements)):
-        root.add_child(elements[i])
-
-    return root
-
-if __name__ == '__main__':
-    numbers = [17,4,1,20,9,23,18,34,18,4]
-    root = numbers[0]
-    numbers_tree = build_tree(numbers)
-    print(numbers_tree.search(34))
-    print(numbers_tree.in_order_traversal())
-    print(numbers_tree.pre_order_traversal())
-    print(numbers_tree.post_order_traversal())
-    print(numbers_tree.find_max())
-    print(numbers_tree.find_min())
-    print(numbers_tree.calculate_sum())
-    #print(numbers_tree.InOrder(root))
+countries = [17,4,1,20,9,23,18,34,18,4]
+#countries = ["India","Pakistan","Germany","USA","China","India","UK","USA"]
+root = BSTreeNode(countries[0])
+for i in countries:
+    root.add_child(i)
+    #numbers_tree = build_tree(numbers)
+print(root.search(34))
+print(root.in_order_traversal(root))
+print(root.pre_order_traversal())
+print(root.post_order_traversal())
+print(root.find_max())
+print(root.find_min())
+print(root.calculate_sum())
+root.InOrder(root)
+root.PreOrder(root)
+root.PostOrder(root)
 
 '''
     countries = ["India","Pakistan","Germany","USA","China","India","UK","USA"]
