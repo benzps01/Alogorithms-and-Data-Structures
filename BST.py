@@ -6,7 +6,11 @@ in_order, pre_order and post_order traversals using recursion
 search if an element exists
 finding min and max value in the tree
 calculating the sum of all the nodes in the BST
+added delete a node from the tree
 '''
+from requests import delete
+
+
 class BSTreeNode:
     def __init__(self, data):
         self.data = data
@@ -131,19 +135,25 @@ class BSTreeNode:
     def PostOrder(self,root):
         stack = []
         current = root
-
         while stack or current:
             while current:
-                if current.right:
-                    stack.append(current.right)
-
+                stack.append(current)
+                stack.append(current)
                 current = current.left
 
-            print(current.data,end= " ")
-
-        if stack:
+            if stack is None:
+                return
+            
             current = stack.pop()
-    
+
+            if stack and stack[-1] == current:
+                current = current.right
+            else:
+                print(current.data,end=" ")
+                current = None
+
+        print()
+
 
     def search(self,val):
         if self.data == val:
@@ -177,6 +187,34 @@ class BSTreeNode:
         
         return current.data
 
+    def delete(self, val):
+        if self.data is None:
+            return None
+        if val < self.data:
+            if self.left:
+                self.left = self.left.delete(val)
+        elif val > self.data:
+            if self.right:
+                self.right = self.right.delete(val)
+        else:
+            if self.left is None:
+                temp = self.right
+                self = None
+                return None
+            if self.right is None:
+                temp = self.left
+                self = None
+                return None
+            current = self.right
+            while current.left:
+                current = current.left
+            self.data = current.data
+            self.right = self.right.delete(current.data)
+        return self
+
+
+            
+
     def calculate_sum(self):
         if self.left:
             left = self.left.calculate_sum()
@@ -206,6 +244,13 @@ print(root.calculate_sum())
 root.InOrder(root)
 root.PreOrder(root)
 root.PostOrder(root)
+
+root.add_child(3)
+root.InOrder(root)
+root.delete(17)
+print(root.data)
+root.InOrder(root)
+
 
 '''
     countries = ["India","Pakistan","Germany","USA","China","India","UK","USA"]
